@@ -6,7 +6,12 @@ import { motion, useScroll, useTransform } from "framer-motion";
  * 0.09 gives a smooth glide without lagging behind the user's scroll.
  */
 const LERP = 0.09;
-const EPSILON = 0.003;
+// Minimum delta (in seconds) before we actually bump video.currentTime.
+// Setting currentTime forces the decoder to seek + decode a new frame —
+// extremely expensive when done every animation frame (≈8–20 ms per call).
+// 1/24 s ≈ 0.042 s gives ~24 fps scrubbing which is visually smooth and
+// roughly 4× cheaper than per-rAF updates.
+const MIN_SEEK_DELTA = 1 / 24;
 
 export default function ScrollVideo() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -34,12 +39,17 @@ export default function ScrollVideo() {
         const target = targetTimeRef.current;
         const current = currentTimeRef.current;
         const delta = target - current;
+        const absDelta = Math.abs(delta);
 
-        if (Math.abs(delta) > EPSILON) {
-          const adaptiveLerp = LERP + Math.min(Math.abs(delta) * 0.02, 0.06);
+        if (absDelta > MIN_SEEK_DELTA) {
+          const adaptiveLerp = LERP + Math.min(absDelta * 0.02, 0.06);
           const next = current + delta * adaptiveLerp;
+          // Only assign when the seek is meaningful — avoids decoder thrash.
           video.currentTime = next;
           currentTimeRef.current = next;
+        } else if (absDelta > 0) {
+          // Snap silently without triggering a decode.
+          currentTimeRef.current = target;
         }
       }
       rafRef.current = requestAnimationFrame(tick);

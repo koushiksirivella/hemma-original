@@ -26,7 +26,9 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    /* scroll-behavior: smooth removed — it interferes with framer-motion's
+       scroll-driven animations and JS scroll scrubbing (causes stutter on
+       ScrollVideo, ScrollSequence, and section transitions). */
     scrollbar-width: thin;
     scrollbar-color: var(--color-warm-border) transparent;
   }
@@ -40,12 +42,16 @@
     overflow-x: hidden;
   }
 
-  /* Grain texture overlay */
+  /* Grain texture overlay — z-index lowered from 9999 → 1.
+     At 9999 the grain layer was promoted ABOVE every UI element, forcing
+     the entire viewport to recomposite on every paint. At z-index 1 it
+     still sits above page background but no longer intercepts paint of
+     UI elements above it. */
   body::after {
     content: "";
     position: fixed;
     inset: 0;
-    z-index: 9999;
+    z-index: 1;
     pointer-events: none;
     opacity: 0.025;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
