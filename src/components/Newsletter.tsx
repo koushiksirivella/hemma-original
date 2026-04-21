@@ -49,7 +49,7 @@ export default function Newsletter() {
             </h2>
             <p className="text-muted text-base leading-relaxed max-w-md text-pretty">
               Get notified about new collections, seasonal offers, and
-              exclusive deals from Balaji Furniture. No spam — just good furniture.
+              exclusive HËMMA releases. No spam — just good furniture.
             </p>
           </motion.div>
 
@@ -70,7 +70,7 @@ export default function Newsletter() {
                     Welcome to the circle.
                   </p>
                   <p className="text-muted text-sm">
-                    Check your inbox — there’s a 10% welcome code waiting for you.
+                    Check your inbox — there's a 10% welcome code waiting for you.
                   </p>
                 </div>
               </div>

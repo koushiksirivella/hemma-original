@@ -37,7 +37,7 @@ export default function PromoBar() {
                 your first piece.
               </h2>
               <p className="text-cream/40 text-base leading-relaxed max-w-md mb-8 text-pretty">
-                Your space deserves furniture you’ll keep for decades, not seasons.
+                Your space deserves furniture you'll keep for decades, not seasons.
                 This code makes the first one easier.
               </p>
               <div className="flex items-center gap-5 mb-10">
@@ -53,7 +53,7 @@ export default function PromoBar() {
                 className="group inline-flex items-center gap-4 text-cream"
               >
                 <span className="text-sm font-medium tracking-wide">
-                  Claim your 15% off
+                  Shop the collection
                 </span>
                 <span className="w-10 h-10 rounded-full border border-cream/20 flex items-center justify-center group-hover:bg-cream group-hover:text-charcoal transition-all duration-500">
                   <ArrowRight size={15} strokeWidth={1.5} />

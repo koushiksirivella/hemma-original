@@ -14,6 +14,7 @@ import PromoBar from "./components/PromoBar";
 import AmbientMood from "./components/AmbientMood";
 import Newsletter from "./components/Newsletter";
 import Footer from "./components/Footer";
+import CustomCursor from "./components/CustomCursor";
 
 /* ── Section transition — luxurious gradient fade ── */
 function SectionTransition({
@@ -73,6 +74,7 @@ function SectionTransition({
 function App() {
   return (
     <>
+      <CustomCursor />
       <Navbar />
       <main>
         <Hero />

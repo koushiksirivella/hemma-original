@@ -36,7 +36,6 @@ export default function ScrollVideo() {
         const delta = target - current;
 
         if (Math.abs(delta) > EPSILON) {
-          /* Adaptive lerp: faster when far, smoother when close */
           const adaptiveLerp = LERP + Math.min(Math.abs(delta) * 0.02, 0.06);
           const next = current + delta * adaptiveLerp;
           video.currentTime = next;
@@ -77,12 +76,8 @@ export default function ScrollVideo() {
     };
   }, [scrollYProgress]);
 
-  /* ── Scroll-linked transforms ── */
-
-  /* Video subtle scale breathe */
   const videoScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.05, 1, 1.02]);
 
-  /* Text choreography — staggered reveal in first 30% of scroll */
   const badgeY = useTransform(scrollYProgress, [0, 0.2], [30, 0]);
   const badgeOpacity = useTransform(scrollYProgress, [0.02, 0.18], [0, 1]);
   const headlineY = useTransform(scrollYProgress, [0, 0.28], [60, 0]);
@@ -90,20 +85,16 @@ export default function ScrollVideo() {
   const subY = useTransform(scrollYProgress, [0, 0.32], [40, 0]);
   const subOpacity = useTransform(scrollYProgress, [0.08, 0.26], [0, 1]);
 
-  /* Text fade out in last 20% */
   const textExitOpacity = useTransform(scrollYProgress, [0.78, 0.95], [1, 0]);
   const textExitY = useTransform(scrollYProgress, [0.78, 0.95], [0, -40]);
 
-  /* Cinematic letterbox — bars retract as you scroll */
   const letterboxHeight = useTransform(scrollYProgress, [0, 0.25], ["12%", "0%"]);
   const letterboxOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
 
-  /* Lighting dynamics — intensity shifts with scroll */
   const warmGlowOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.12, 0.28, 0.2, 0.08]);
   const coolFillOpacity = useTransform(scrollYProgress, [0, 0.4, 0.8, 1], [0.06, 0.15, 0.1, 0.04]);
   const rimOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 0.2, 0.1]);
 
-  /* Progress bar */
   const progressScaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
@@ -114,17 +105,12 @@ export default function ScrollVideo() {
       style={{ height: "300vh" }}
       aria-label="Scroll-driven room assembly"
     >
-      {/* ── Entrance seam — subtle dark blend from previous section ── */}
       <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none">
         <div className="h-16 bg-gradient-to-b from-charcoal/60 to-transparent" />
       </div>
 
-      {/* ── Sticky viewport ── */}
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-charcoal">
 
-        {/* ═══════════════════════════════════════════
-            LAYER 0 — Video — full-bleed, vibrant
-        ═══════════════════════════════════════════ */}
         <motion.div
           style={{ scale: videoScale }}
           className="absolute inset-0 will-change-transform"
@@ -149,9 +135,6 @@ export default function ScrollVideo() {
           </video>
         </motion.div>
 
-        {/* ═══════════════════════════════════════════
-            LAYER 1 — Bottom gradient for text readability
-        ═══════════════════════════════════════════ */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -165,9 +148,6 @@ export default function ScrollVideo() {
           }}
         />
 
-        {/* ═══════════════════════════════════════════
-            LAYER 2 — Warm key light (scroll-reactive)
-        ═══════════════════════════════════════════ */}
         <motion.div
           style={{ opacity: warmGlowOpacity }}
           className="absolute inset-0 pointer-events-none mix-blend-soft-light"
@@ -181,9 +161,6 @@ export default function ScrollVideo() {
           />
         </motion.div>
 
-        {/* ═══════════════════════════════════════════
-            LAYER 3 — Cool fill light (scroll-reactive)
-        ═══════════════════════════════════════════ */}
         <motion.div
           style={{ opacity: coolFillOpacity }}
           className="absolute inset-0 pointer-events-none mix-blend-overlay"
@@ -197,9 +174,6 @@ export default function ScrollVideo() {
           />
         </motion.div>
 
-        {/* ═══════════════════════════════════════════
-            LAYER 4 — Rim light along right edge
-        ═══════════════════════════════════════════ */}
         <motion.div
           style={{ opacity: rimOpacity }}
           className="absolute inset-0 pointer-events-none mix-blend-screen"
@@ -213,9 +187,6 @@ export default function ScrollVideo() {
           />
         </motion.div>
 
-        {/* ═══════════════════════════════════════════
-            LAYER 5 — Soft vignette (subtle, not heavy)
-        ═══════════════════════════════════════════ */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -224,9 +195,6 @@ export default function ScrollVideo() {
           }}
         />
 
-        {/* ═══════════════════════════════════════════
-            CINEMATIC LETTERBOX — bars retract on scroll
-        ═══════════════════════════════════════════ */}
         <motion.div
           style={{ height: letterboxHeight, opacity: letterboxOpacity }}
           className="absolute top-0 left-0 right-0 z-[5] bg-charcoal pointer-events-none"
@@ -236,15 +204,11 @@ export default function ScrollVideo() {
           className="absolute bottom-0 left-0 right-0 z-[5] bg-charcoal pointer-events-none"
         />
 
-        {/* ═══════════════════════════════════════════
-            CONTENT — choreographed text with entrance + exit
-        ═══════════════════════════════════════════ */}
         <motion.div
           style={{ opacity: textExitOpacity, y: textExitY }}
           className="absolute bottom-0 left-0 right-0 z-10"
         >
           <div className="max-w-[1440px] mx-auto px-8 md:px-12 lg:px-16 pb-12 md:pb-16 lg:pb-24">
-            {/* Eyebrow */}
             <motion.p
               style={{ y: badgeY, opacity: badgeOpacity }}
               className="text-cream/35 text-[10px] tracking-[0.3em] uppercase mb-5 font-medium"
@@ -252,7 +216,6 @@ export default function ScrollVideo() {
               Scroll to build your room
             </motion.p>
 
-            {/* Headline */}
             <motion.h2
               style={{ y: headlineY, opacity: headlineOpacity }}
               className="font-heading text-4xl md:text-5xl lg:text-[4.5rem] font-semibold tracking-[-0.04em] text-cream leading-[0.88] mb-4"
@@ -264,18 +227,16 @@ export default function ScrollVideo() {
               </span>
             </motion.h2>
 
-            {/* Body */}
             <motion.p
               style={{ y: subY, opacity: subOpacity }}
               className="text-cream/35 text-sm md:text-base max-w-md leading-relaxed text-pretty"
             >
               Watch a room take shape — one considered piece at a time.
-              This is how Balaji Furniture spaces come to life.
+              This is how HËMMA spaces come to life.
             </motion.p>
           </div>
         </motion.div>
 
-        {/* ── Progress indicator — vertical bar, right edge ── */}
         <div className="absolute right-6 lg:right-10 top-1/2 -translate-y-1/2 z-10 flex flex-col items-center gap-3">
           <span className="text-cream/20 text-[9px] tracking-[0.2em] uppercase font-medium -rotate-90 origin-center mb-4">
             Progress
@@ -288,7 +249,6 @@ export default function ScrollVideo() {
           </div>
         </div>
 
-        {/* ── Scroll hint — only visible at start ── */}
         <motion.div
           style={{
             opacity: useTransform(scrollYProgress, [0, 0.08], [1, 0]),
@@ -309,7 +269,6 @@ export default function ScrollVideo() {
         </motion.div>
       </div>
 
-      {/* ── Exit seam — dark-to-dark transition into RoomInspiration ── */}
       <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
         <div className="h-px bg-gradient-to-r from-transparent via-cream/10 to-transparent" />
         <div className="h-24 bg-gradient-to-t from-charcoal to-transparent" />

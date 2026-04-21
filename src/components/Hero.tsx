@@ -350,7 +350,6 @@ export default function Hero() {
   });
 
   /* ── Scroll-linked cinematic transforms ── */
-  // Video: dramatic zoom + tilt + progressive depth-of-field blur
   const videoY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.5]);
   const videoRotate = useTransform(scrollYProgress, [0, 1], [0, -3]);
@@ -358,11 +357,9 @@ export default function Hero() {
   const videoBlur = useSpring(videoBlurRaw, { stiffness: 80, damping: 20 });
   const videoBlurFilter = useMotionTemplate`blur(${videoBlur}px)`;
 
-  // Content wrapper — overall fade + rise
   const contentOpacity = useTransform(scrollYProgress, [0, 0.45], [1, 0]);
   const contentY = useTransform(scrollYProgress, [0, 0.5], [0, 100]);
 
-  // Individual element scroll exits — cinematic split
   const eyebrowY = useTransform(scrollYProgress, [0, 0.25], [0, -50]);
   const headlineX = useTransform(scrollYProgress, [0, 0.4], [0, -150]);
   const headlineRotate = useTransform(scrollYProgress, [0, 0.4], [0, -2]);
@@ -371,11 +368,9 @@ export default function Hero() {
   const ctaY = useTransform(scrollYProgress, [0, 0.3], [0, 40]);
   const statsX = useTransform(scrollYProgress, [0.02, 0.45], [0, 200]);
 
-  // Cinematic darkening + letterbox
   const overlayDarken = useTransform(scrollYProgress, [0.2, 0.9], [0, 0.5]);
   const letterboxH = useTransform(scrollYProgress, [0, 0.6], [0, 80]);
 
-  /* Mouse-reactive 3D tilt — applied to overlays only, not the video */
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
   const tiltX = useSpring(
@@ -396,7 +391,6 @@ export default function Hero() {
   );
   const vignetteGradient = useMotionTemplate`radial-gradient(ellipse 70% 60% at ${vignetteX}% ${vignetteY}%, transparent 0%, rgba(26,21,18,0.18) 100%)`;
 
-  /* Mouse-reactive warm spotlight — follows cursor */
   const spotX = useSpring(useTransform(mouseX, [0, 1], [20, 80]), {
     stiffness: 30,
     damping: 35,
@@ -422,13 +416,12 @@ export default function Hero() {
       style={{ perspective: "1200px" }}
     >
       {/* ═══════════════════════════════════════════
-          LAYER 0 — Full-bleed video at NATIVE quality (no 3D transforms)
+          LAYER 0 — Full-bleed video
       ═══════════════════════════════════════════ */}
       <motion.div
         className="absolute inset-0 will-change-transform"
         style={{ y: videoY, scale: videoScale, rotate: videoRotate, filter: videoBlurFilter }}
       >
-        {/* Cinematic radial reveal */}
         <motion.div
           initial={{ clipPath: "circle(0% at 50% 60%)", opacity: 0 }}
           animate={{ clipPath: "circle(150% at 50% 60%)", opacity: 1 }}
@@ -450,23 +443,10 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Color-grading overlay removed — video breathes naturally now */}
-
-      {/* ═══════════════════════════════════════════
-          DEPTH LAYER 1 — Radial grid (furthest back, ultra-subtle)
-      ═══════════════════════════════════════════ */}
       <RadialGrid />
-
-      {/* ═══════════════════════════════════════════
-          DEPTH LAYER 2 — Aurora mesh + Bokeh (behind 3D tilt wrapper)
-      ═══════════════════════════════════════════ */}
       <AuroraMesh />
       <BokehField />
 
-      {/* ═══════════════════════════════════════════
-          3D TILT WRAPPER — All gradient overlays get perspective
-          This creates the 3D depth illusion without touching video quality
-      ═══════════════════════════════════════════ */}
       <motion.div
         className="absolute inset-0 pointer-events-none z-[5]"
         style={{
@@ -476,7 +456,6 @@ export default function Hero() {
         }}
       >
 
-      {/* L1: Bottom anchor — charcoal fade for text readability */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -490,8 +469,6 @@ export default function Hero() {
             )`,
         }}
       />
-
-      {/* L2: Left vignette — subtle cinematic side shadow */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -499,8 +476,6 @@ export default function Hero() {
             "linear-gradient(108deg, rgba(26,21,18,0.12) 0%, transparent 35%)",
         }}
       />
-
-      {/* L3: Right edge fade — subtle balance */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -508,8 +483,6 @@ export default function Hero() {
             "linear-gradient(252deg, rgba(26,21,18,0.05) 0%, transparent 30%)",
         }}
       />
-
-      {/* L4: Breathing terracotta glow — luxury warmth from bottom-left */}
       <div
         className="absolute inset-0 pointer-events-none mix-blend-soft-light hero-glow-breathe"
         style={{
@@ -517,8 +490,6 @@ export default function Hero() {
             "radial-gradient(ellipse 130% 55% at 25% 95%, rgba(184,92,63,0.15) 0%, transparent 65%)",
         }}
       />
-
-      {/* L5: Breathing sage ambient — top-right atmospheric counterpoint */}
       <div
         className="absolute inset-0 pointer-events-none mix-blend-overlay hero-glow-breathe-alt"
         style={{
@@ -526,14 +497,10 @@ export default function Hero() {
             "radial-gradient(ellipse 90% 65% at 80% 10%, rgba(107,125,94,0.15) 0%, transparent 60%)",
         }}
       />
-
-      {/* L5b: Mouse-reactive vignette — subtle depth that follows cursor */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{ background: vignetteGradient }}
       />
-
-      {/* L6: Warm light leak — subtle light spill */}
       <div
         className="absolute inset-0 pointer-events-none mix-blend-soft-light opacity-[0.04]"
         style={{
@@ -541,8 +508,6 @@ export default function Hero() {
             "radial-gradient(ellipse 60% 80% at 65% 40%, rgba(220,200,180,0.5) 0%, transparent 55%)",
         }}
       />
-
-      {/* L7: Film grain — tactile 3D texture */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.02] hero-grain"
         style={{
@@ -551,8 +516,6 @@ export default function Hero() {
           backgroundSize: "200px 200px",
         }}
       />
-
-      {/* L8: Subtle inset shadow — light 3D depth */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -560,14 +523,10 @@ export default function Hero() {
             "inset 0 0 120px 20px rgba(26,21,18,0.08), inset 0 -40px 60px -20px rgba(26,21,18,0.1)",
         }}
       />
-
-      {/* L9: Mouse-reactive warm spotlight — follows cursor */}
       <motion.div
         className="absolute inset-0 pointer-events-none mix-blend-soft-light"
         style={{ background: spotlightGradient }}
       />
-
-      {/* L10: Top-edge highlight — simulates overhead rim light */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -575,8 +534,6 @@ export default function Hero() {
             "linear-gradient(180deg, rgba(240,230,216,0.03) 0%, transparent 20%)",
         }}
       />
-
-      {/* L11: Corner accent glow — top-right warm accent */}
       <div
         className="absolute inset-0 pointer-events-none hero-corner-pulse"
         style={{
@@ -584,8 +541,6 @@ export default function Hero() {
             "radial-gradient(ellipse 40% 35% at 90% 8%, rgba(203,122,96,0.06) 0%, transparent 60%)",
         }}
       />
-
-      {/* L12: Diagonal color band — subtle chromatic accent */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.025]"
         style={{
@@ -595,25 +550,13 @@ export default function Hero() {
       />
 
       </motion.div>
-      {/* ── End 3D tilt wrapper ── */}
 
-      {/* ═══════════════════════════════════════════
-          EFFECTS — Particles, light sweep, lens flare
-      ═══════════════════════════════════════════ */}
-
-      {/* Floating luminous particles — warm dust motes */}
       <FloatingParticles />
-
-      {/* Prismatic light ribbons — diagonal cinematic streaks */}
       <PrismaticRibbons />
-
-      {/* Chromatic depth ring — holographic halo */}
       <ChromaticRing />
 
-      {/* Horizontal light sweep — cinematic beam */}
       <div className="absolute inset-0 pointer-events-none z-[3] hero-light-sweep" />
 
-      {/* Anamorphic lens flare — horizontal streak */}
       <motion.div
         initial={{ opacity: 0, scaleX: 0 }}
         animate={{ opacity: 1, scaleX: 1 }}
@@ -623,12 +566,8 @@ export default function Hero() {
         <div className="hero-lens-flare" />
       </motion.div>
 
-      {/* Scan line — slow horizontal sweep */}
       <ScanLine />
 
-      {/* ═══════════════════════════════════════════
-          CINEMATIC SCROLL OVERLAYS — darkening + letterbox
-      ═══════════════════════════════════════════ */}
       <motion.div
         className="absolute inset-0 pointer-events-none z-[8] bg-charcoal"
         style={{ opacity: overlayDarken }}
@@ -649,7 +588,7 @@ export default function Hero() {
       />
 
       {/* ═══════════════════════════════════════════
-          CONTENT — scroll-linked split exit animations
+          CONTENT
       ═══════════════════════════════════════════ */}
       <motion.div
         style={{ opacity: contentOpacity, y: contentY }}
@@ -661,21 +600,20 @@ export default function Hero() {
           animate="animate"
           className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-end"
         >
-          {/* ── Left: Headline block (7 cols) ── */}
           <div className="lg:col-span-7 flex flex-col gap-8">
-            {/* Eyebrow — flies up on scroll */}
+            {/* Eyebrow */}
             <motion.div style={{ y: eyebrowY }}>
               <motion.div variants={stagger.item(0)}>
                 <span className="inline-flex items-center gap-2 rounded-full border border-cream/[0.12] bg-cream/[0.05] backdrop-blur-md px-4 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
                   <span className="w-1.5 h-1.5 rounded-full bg-terracotta animate-pulse" />
                   <span className="text-cream/60 text-[11px] font-medium tracking-[0.2em] uppercase">
-                    Balaji Furniture Home Needs
+                    2025 Collection Now Live
                   </span>
                 </span>
               </motion.div>
             </motion.div>
 
-            {/* Headline — slides left + tilts on scroll */}
+            {/* Headline */}
             <motion.div style={{ x: headlineX, rotate: headlineRotate }}>
               <motion.h1
                 variants={stagger.item(1)}
@@ -684,27 +622,27 @@ export default function Hero() {
               >
                 <span className="hero-text-shimmer inline-block">Furniture</span>
                 <br />
-                that makes your
+                that feels like
                 <br />
                 <span className="hero-text-gradient italic font-light">
-                  house a home.
+                  coming home.
                 </span>
               </motion.h1>
             </motion.div>
 
-            {/* Subheadline — sinks down on scroll */}
+            {/* Subheadline */}
             <motion.div style={{ y: subheadY }}>
               <motion.p
                 variants={stagger.item(2)}
                 className="text-cream/55 text-base lg:text-lg leading-relaxed max-w-[420px] text-pretty"
                 style={{ filter: 'drop-shadow(0 2px 12px rgba(0,0,0,0.4))' }}
               >
-                Quality furniture & home needs for every room.
-                Built with care in Nandigama, Andhra Pradesh.
+                Scandinavian simplicity meets Indian craftsmanship.
+                Pieces you'll keep for decades, not seasons.
               </motion.p>
             </motion.div>
 
-            {/* CTA — shrinks + drops on scroll */}
+            {/* CTA */}
             <motion.div style={{ scale: ctaScale, y: ctaY }}>
               <motion.div variants={stagger.item(3)}>
                 <MagneticCTA />
@@ -712,20 +650,19 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* ── Right: Stats block — slides right on scroll ── */}
+          {/* Stats */}
           <motion.div
             style={{ x: statsX }}
             className="lg:col-span-5 flex lg:justify-end"
           >
             <motion.div variants={stagger.item(4)}>
-              {/* Double-bezel stats card */}
               <div className="rounded-[1.25rem] border border-cream/[0.08] bg-cream/[0.04] p-1.5 backdrop-blur-xl">
                 <div className="rounded-[calc(1.25rem-0.375rem)] bg-charcoal/40 px-8 py-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)]">
                   <div className="flex gap-10 lg:gap-12">
                     {[
-                      { value: "500+", label: "Products" },
-                      { value: "5★", label: "Google Rating" },
-                      { value: "10yr", label: "In Nandigama" },
+                      { value: "2,400+", label: "Curated Pieces" },
+                      { value: "4.9★", label: "Avg Rating" },
+                      { value: "12yr", label: "Warranty" },
                     ].map((stat, i) => (
                       <div key={stat.label} className="flex items-center gap-10 lg:gap-12">
                         {i > 0 && (
@@ -749,7 +686,7 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* ── Scroll indicator ── */}
+      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -772,7 +709,6 @@ export default function Hero() {
         </div>
       </motion.div>
 
-      {/* ── Bottom edge glow transition ── */}
       <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
         <div className="h-px bg-gradient-to-r from-transparent via-cream/20 to-transparent" />
         <div className="h-12 bg-gradient-to-t from-cream/[0.04] to-transparent" />

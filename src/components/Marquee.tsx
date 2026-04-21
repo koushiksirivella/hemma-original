@@ -2,12 +2,12 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 const items = [
-  "Free delivery in Nandigama & surrounding areas",
+  "Complimentary white-glove delivery above ₹9,999",
   "5-year solid wood & joinery warranty",
-  "30-day hassle-free returns",
-  "Visit us at Radam Center, Nandigama",
-  "Call us: +91 96030 05888",
-  "Custom furniture orders available",
+  "30-day no-questions-asked returns",
+  "Your first piece, 20% off — code WELCOME20",
+  "Free 1-on-1 room design consultation",
+  "Expert assembly included with every order",
 ];
 
 export default function Marquee() {

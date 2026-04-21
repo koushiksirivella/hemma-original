@@ -62,7 +62,7 @@ export default function Navbar() {
             {/* Logo — compact */}
             <a href="#" className="flex items-center gap-1 group shrink-0">
               <span className="font-heading text-[15px] font-semibold tracking-tight text-charcoal">
-                BALAJI
+                HËMMA
               </span>
               <span className="w-1 h-1 rounded-full bg-terracotta group-hover:scale-[2] transition-transform duration-300" />
             </a>

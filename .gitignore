@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Local backup of original brand assets — not for deployment
+_backup-original-hemma/
+
+# Vercel
+.vercel
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

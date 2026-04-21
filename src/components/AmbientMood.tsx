@@ -85,7 +85,7 @@ export default function AmbientMood() {
           transition={{ duration: 1, delay: 0.5 }}
           className="block mt-4 text-cream/20 text-xs tracking-[0.3em] uppercase"
         >
-          BALAJI FURNITURE
+          HËMMA
         </motion.span>
       </motion.div>
     </section>
